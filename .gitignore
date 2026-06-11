@@ -1,0 +1,22 @@
+# Build / dependencies
+node_modules/
+dist/
+tsconfig.*.tsbuildinfo
+
+# AI assistant state
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+*~
+.vscode/
+
+# Sensitive
+*.env
+**credentials**
+secrets/

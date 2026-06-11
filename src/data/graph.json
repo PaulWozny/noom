@@ -1,0 +1,704 @@
+{
+  "nodes": [
+    {
+      "id": "lunar-oxygen-production",
+      "label": "Produce O₂ on the Moon",
+      "type": "goal",
+      "status": "active",
+      "trl": null,
+      "phaseId": "phase-3",
+      "tags": [
+        "flagship"
+      ],
+      "body": "# Lunar Oxygen Production\n\n## Description\n\nProduce oxygen from lunar resources to support sustained human presence on the Moon. Oxygen is required for life support and propellant.\n\n## Sub-goals\n\n- Demonstrate oxygen extraction at pilot scale\n- Achieve TRL 6 by 2030\n\n## Key Capabilities Required\n\n- [[Capabilities/Produce Oxygen]]\n\n## Stakeholders\n\n- [[Organizations/ESA]]\n\n## Notes",
+      "path": "Goals/Lunar Oxygen Production.md",
+      "cost": null,
+      "budget": 15000000,
+      "duration": null,
+      "deadline": "2030-12-31",
+      "attachments": [
+        {
+          "id": "att-power-supply-interruption",
+          "kind": "risk",
+          "label": "Power Supply Interruption",
+          "body": "# Power Supply Interruption\n\n## Description\n\nLoss or significant reduction of electrical power during the 14-day lunar night halts all ISRU operations and may cause irreversible damage to thermal systems held above ambient temperature.\n\n## Probability\n\n- [ ] Low\n- [ ] Medium\n- [x] High\n\n## Impact\n\n- [ ] Low\n- [ ] Medium\n- [x] High\n\n## Root Causes\n\n- Solar array failure (dust, meteorite impact, pointing error)\n- Battery/RFC depletion during extended outage\n- Fission Surface Power system fault\n- Grid distribution fault isolating a subsystem\n\n## Mitigation\n\n- Redundant power generation (solar + RFC or solar + FSP)\n- Graceful shutdown procedures for all ISRU processes on power loss\n- Thermal battery for critical hold temperatures on reactors\n- Load-shedding priority: life support > power > ISRU production\n\n## Notes\n\nThis is a top-level system risk. [[Capabilities/Generate Power]] must be designed with N+1 redundancy.",
+          "probability": "high",
+          "impact": "high",
+          "url": null
+        },
+        {
+          "id": "att-esa",
+          "kind": "organization",
+          "label": "European Space Agency (ESA)",
+          "body": "# European Space Agency (ESA)\n\n## Description\n\nEuropean Space Agency — intergovernmental organization dedicated to space exploration, science, and technology.\n\n## Domain\n\nSpace exploration, lunar robotics, ISRU technology development\n\n## Key People\n\n- TBD\n\n## Funding Sources\n\n- [[Funding/ESA Grant]]\n\n## Collaborators\n\n- NASA\n- JAXA\n- Various European research institutions\n\n## Notes",
+          "probability": null,
+          "impact": null,
+          "url": null
+        },
+        {
+          "id": "att-esa-grant",
+          "kind": "funding",
+          "label": "ESA Grant",
+          "body": "# ESA Grant\n\n## Description\n\nEuropean Space Agency research grant for lunar ISRU technology development.\n\n## Provider\n\nEuropean Space Agency\n\n## Budget\n\n€500,000\n\n## Deadline\n\n2027-12-31\n\n## Eligibility Criteria\n\n- Lead institution must be in ESA member state\n- Co-funding required (minimum 20%)\n\n## Supported Activities\n\n- [[Experiments/Vacuum Chamber Pyrolysis Test]]\n\n## Notes",
+          "probability": null,
+          "impact": null,
+          "url": "https://www.esa.int/"
+        },
+        {
+          "id": "att-closed-loop-life-support",
+          "kind": "note",
+          "label": "Future application: closed-loop life support",
+          "body": "# Closed-Loop Life Support\n\n## Description\n\nAchieve a fully closed-loop life support system for a lunar habitat using only locally produced resources. Crew consume oxygen and water, waste is processed and recycled, with ISRU providing top-up for losses.\n\n## Sub-goals\n\n- Zero Earth-resupply of oxygen (100% local production)\n- >95% water recovery and recycling rate\n- Continuous power supply through lunar night\n\n## Key Capabilities Required\n\n- [[Capabilities/Produce Oxygen]]\n- [[Capabilities/Extract Water Ice]]\n- [[Capabilities/Generate Power]]\n\n## Notes\n\nThis is the ultimate long-term goal of a self-sustaining lunar outpost. Requires all lower-tier capabilities to be operational and integrated.",
+          "probability": null,
+          "impact": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "id": "propellant-production",
+      "label": "Sustained Propellant Supply",
+      "type": "goal",
+      "status": "planned",
+      "trl": null,
+      "phaseId": "phase-4",
+      "tags": [
+        "flagship"
+      ],
+      "body": "# Propellant Production\n\n## Description\n\nProduce sufficient LOX/LH2 propellant from lunar resources to refuel ascent vehicles and in-space depots, reducing Earth-launched propellant mass by >50%. This is the primary economic driver for lunar ISRU.\n\n## Sub-goals\n\n- Achieve production rate of ≥1 tonne propellant/month\n- Demonstrate successful vehicle refuelling operations\n- Validate propellant quality meets flight certification standards\n\n## Stakeholders\n\n- [[Organizations/ESA]]\n\n## Notes\n\nRealising this goal enables dramatic reduction in launch costs to the lunar surface and makes sustained human presence economically viable.",
+      "path": "Goals/Propellant Production.md",
+      "cost": null,
+      "budget": 40000000,
+      "duration": null,
+      "deadline": "2033-06-30",
+      "attachments": [
+        {
+          "id": "att-rocket-failure",
+          "kind": "risk",
+          "label": "Rocket Failure",
+          "body": "# Rocket Failure\n\n## Description\n\nLaunch vehicle failure results in loss of payload and all experiment data.\n\n## Probability\n\n- [x] Low\n- [ ] Medium\n- [ ] High\n\n## Impact\n\n- [ ] Medium\n- [x] High\n\n## Mitigation\n\n- Use proven launch vehicles\n- Include redundant systems\n- Ensure rapid re-flight option\n\n## Affected Nodes\n\n- All space-based experiments\n\n## Notes",
+          "probability": "low",
+          "impact": "critical",
+          "url": null
+        }
+      ]
+    },
+    {
+      "id": "surface-power",
+      "label": "Surface Power Station",
+      "type": "asset",
+      "status": "done",
+      "trl": null,
+      "phaseId": "phase-1",
+      "tags": [
+        "power",
+        "infrastructure"
+      ],
+      "body": "# Generate Power\n\n## Description\n\nCapability to generate and distribute continuous electrical power at the lunar surface. Critical enabler for all thermal, electrochemical, and mechanical ISRU processes. Power interruption during the 14-day lunar night is a defining constraint.\n\n## Power Source Options\n\n- **Solar PV arrays** — lightweight, TRL 9, but limited to lunar day (~14 Earth days)\n- **Fission Surface Power (FSP)** — continuous 10 kWe, works through night, TRL 5 (NASA/DoE development)\n- **RFC (Regenerative Fuel Cells)** — store solar energy as H₂/O₂, discharge at night\n\n## Required Capability\n\n- Continuous power: >10 kWe (ISRU operations)\n- Peak power: >30 kWe (electrolysis + heating combined loads)\n- Distribution: 480V DC or 100–120V bus\n\n## Key Challenges\n\n- 14-day lunar night with no solar input\n- Dust accumulation on solar panels reduces output\n- Thermal management of waste heat in vacuum\n\n## Risks\n\n- [[Risks/Power Supply Interruption]]\n- [[Risks/Dust Contamination]]\n\n## Notes",
+      "path": "Capabilities/Generate Power.md",
+      "cost": null,
+      "budget": null,
+      "duration": null,
+      "deadline": null,
+      "attachments": [
+        {
+          "id": "att-dust-contamination",
+          "kind": "risk",
+          "label": "Dust Contamination",
+          "body": "# Dust Contamination\n\n## Description\n\nLunar dust contaminates seals, sensors, and thermal control surfaces, degrading experiment performance.\n\n## Probability\n\n- [ ] Low\n- [ ] Medium\n- [x] High\n\n## Impact\n\n- [ ] Low\n- [x] Medium\n- [ ] High\n\n## Mitigation\n\n- Electrostatic dust mitigation\n- Physical barriers and seals\n- Dust-tolerant design\n\n## Affected Nodes\n\n- All lunar surface experiments\n\n## Notes",
+          "probability": "high",
+          "impact": "medium",
+          "url": null
+        }
+      ]
+    },
+    {
+      "id": "regolith",
+      "label": "Lunar Regolith Feedstock",
+      "type": "asset",
+      "status": "done",
+      "trl": null,
+      "phaseId": "phase-1",
+      "tags": [
+        "lunar",
+        "feedstock"
+      ],
+      "body": "# Regolith\n\n## Description\n\nLunar surface soil and crushed rock. The primary feedstock for ISRU on the Moon.\n\n## Source / Location\n\nLunar surface — mare and highland regions.\n\n## Availability\n\nAbundant across the lunar surface. Composition varies by region.\n\n## Composition / Properties\n\n- Oxide content: ~40-45% oxygen by mass (bound in oxides)\n- Primary minerals: pyroxene, plagioclase, olivine, ilmenite\n- Grain size: typically 40-800 µm\n\n## Used By\n\n- [[Technologies/Hydrogen Reduction]]\n- [[Technologies/Molten Regolith Electrolysis]]\n\n## Notes",
+      "path": "Resources/Regolith.md",
+      "cost": null,
+      "budget": null,
+      "duration": null,
+      "deadline": null,
+      "attachments": []
+    },
+    {
+      "id": "water",
+      "label": "Extracted Water",
+      "type": "asset",
+      "status": "planned",
+      "trl": null,
+      "phaseId": "phase-2",
+      "tags": [
+        "water",
+        "volatiles"
+      ],
+      "body": "Water recovered from polar ice deposits and regolith processing. Feedstock for electrolysis (oxygen + hydrogen) and a life-support reserve.",
+      "path": "",
+      "cost": null,
+      "budget": null,
+      "duration": null,
+      "deadline": null,
+      "attachments": []
+    },
+    {
+      "id": "hydrogen",
+      "label": "Hydrogen Supply",
+      "type": "asset",
+      "status": "planned",
+      "trl": null,
+      "phaseId": "phase-2",
+      "tags": [
+        "volatiles",
+        "fuel"
+      ],
+      "body": "Hydrogen produced by water electrolysis. Reductant for the ilmenite reduction loop and fuel component of LOX/LH₂ propellant.",
+      "path": "",
+      "cost": null,
+      "budget": null,
+      "duration": null,
+      "deadline": null,
+      "attachments": []
+    },
+    {
+      "id": "oxygen",
+      "label": "Oxygen Supply",
+      "type": "asset",
+      "status": "planned",
+      "trl": null,
+      "phaseId": "phase-3",
+      "tags": [
+        "oxidizer",
+        "life-support"
+      ],
+      "body": "Oxygen extracted from regolith or water — breathing gas for crewed operations and oxidizer for propellant. The central product of this roadmap: three competing production routes feed it.",
+      "path": "",
+      "cost": null,
+      "budget": null,
+      "duration": null,
+      "deadline": null,
+      "attachments": []
+    },
+    {
+      "id": "regolith-excavation",
+      "label": "Regolith Excavation",
+      "type": "tech",
+      "status": "active",
+      "trl": 4,
+      "phaseId": "phase-1",
+      "tags": [
+        "mining"
+      ],
+      "body": "# Regolith Excavation\n\n## Description\n\nMechanical excavation and transport of lunar regolith for use as ISRU feedstock. Covers bucket-wheel, auger screw, and pneumatic conveying concepts adapted for lunar gravity and vacuum.\n\n## Inputs\n\n- Electrical power\n- Excavation hardware\n\n## Outputs\n\n- Regolith (bulk feed stream)\n\n## Parameters\n\n- Excavation rate: 100–500 kg/hr (pilot scale)\n- Depth: 0–2 m (surface layer, primary target)\n- Power (kW): 0.5–3 (per kg excavated)\n- Dust generation: high — mitigation required\n\n## Key Challenges\n\n- Highly abrasive regolith causes rapid tool wear\n- Vacuum operation — no air cooling or pneumatic actuation\n- Cohesive regolith at depth can jam auger mechanisms\n- Electrostatic adhesion of fine particles to surfaces\n\n## TRL Justification\n\nMultiple auger and bucket-wheel prototypes demonstrated in lunar simulant at Earth gravity. Vacuum and low-gravity testing still limited.\n\n## Key Experiments\n\n- [[Experiments/Regolith Auger Demonstration]]\n\n## Risks\n\n- [[Risks/Equipment Wear]]\n- [[Risks/Dust Contamination]]\n\n## Notes\n\nEnables downstream processing by [[Technologies/Water Ice Extraction]] for PSR targets and feeds bulk regolith to thermal reduction technologies.",
+      "path": "Technologies/Regolith Excavation.md",
+      "cost": {
+        "development": 2500000,
+        "operation": 400000
+      },
+      "budget": null,
+      "duration": "18 months",
+      "deadline": null,
+      "attachments": [
+        {
+          "id": "att-regolith-auger-demonstration",
+          "kind": "experiment",
+          "label": "Regolith Auger Demonstration",
+          "body": "# Regolith Auger Demonstration\n\n## Description\n\nGround-based demonstration of an auger-screw excavation system in a vacuum chamber filled with JSC-1A lunar simulant. Characterises excavation rate, tool wear, dust generation, and power consumption under representative conditions.\n\n## Objective\n\nEstablish excavation performance vs tool geometry and rotation speed; measure wear rate on different auger materials; quantify dust lofting inside the chamber.\n\n## Methodology\n\n1. Compact JSC-1A simulant to target bulk density (1.5 g/cm³ surface, 1.9 g/cm³ at 0.5 m depth)\n2. Run auger at 3 rotation speeds × 2 penetration rates — 6 test points\n3. Extract at 20 cm, 50 cm, 100 cm depth; measure accumulated regolith per pass\n4. Weigh auger before and after for wear measurement\n5. Particle counter monitors dust during all runs\n\n## Success Criteria\n\n- Excavation rate > 10 kg/hr at lab scale\n- Tool mass loss < 1 g per 10 kg excavated\n- No chamber contamination beyond accepted dust threshold\n\n## Required Infrastructure\n\n- Lunar Simulant Testbed (vacuum chamber + regolith bed + instrumentation)\n\n## Risks\n\n- [[Risks/Dust Contamination]]\n- [[Risks/Equipment Wear]]\n\n## Notes",
+          "probability": null,
+          "impact": null,
+          "url": null
+        },
+        {
+          "id": "att-equipment-wear",
+          "kind": "risk",
+          "label": "Equipment Wear",
+          "body": "# Equipment Wear\n\n## Description\n\nSevere abrasion of mechanical components (auger teeth, seals, conveyor belts, valve seats) caused by the angular, glass-like particles in lunar regolith. Wear rates significantly exceed terrestrial analogues due to the lack of water-rounded particle edges.\n\n## Probability\n\n- [ ] Low\n- [x] Medium\n- [ ] High\n\n## Impact\n\n- [ ] Low\n- [x] Medium\n- [ ] High\n\n## Root Causes\n\n- Regolith particle angularity (no erosional rounding)\n- High hardness of ilmenite and pyroxene grains\n- No lubrication possible in vacuum (conventional lubricants outgas)\n\n## Mitigation\n\n- Ceramic or tungsten-carbide coated tool surfaces\n- Dry lubricants (MoS₂, PTFE-impregnated bearings) validated for vacuum\n- Modular/replaceable wear elements — design for field swap\n- Condition monitoring (vibration, current draw) to detect wear onset\n\n## Notes\n\nWorks synergistically with [[Risks/Dust Contamination]] — fine abrasive dust generated by excavation causes secondary wear on seals and optical surfaces downstream.",
+          "probability": "medium",
+          "impact": "medium",
+          "url": null
+        }
+      ]
+    },
+    {
+      "id": "water-ice-extraction",
+      "label": "Water Ice Extraction",
+      "type": "tech",
+      "status": "planned",
+      "trl": 2,
+      "phaseId": "phase-2",
+      "tags": [
+        "water",
+        "polar"
+      ],
+      "body": "# Water Ice Extraction\n\n## Description\n\nExtraction and sublimation of water ice from permanently shadowed regions (PSRs) near the lunar poles. Ice-bearing regolith is excavated and thermally processed to drive off water vapour, which is then captured and condensed.\n\n## Inputs\n\n- Ice-bearing regolith (PSR deposits)\n- Thermal energy for sublimation\n- Excavation capability ([[Technologies/Regolith Excavation]])\n\n## Outputs\n\n- Water (liquid, for electrolysis or life support)\n\n## Parameters\n\n- Water content (mass %): 0.1–10% (estimates vary widely by site)\n- Extraction temperature: −100°C to 0°C (sublimation regime)\n- Power (kW): 1–5 (heating and transport)\n\n## Key Challenges\n\n- PSRs are permanently dark — no solar power available locally\n- Very low temperatures require robust thermal control\n- Water ice distribution is heterogeneous; exact deposits poorly mapped\n- High excavation rate needed to compensate for low ice concentration\n\n## TRL Justification\n\nConcept studies and laboratory demonstrations on ice-simulant mixtures exist, but no integrated system tested under representative thermal/vacuum conditions.\n\n## Key Experiments\n\nNone planned yet.\n\n## Risks\n\n- [[Risks/Equipment Wear]]\n- [[Risks/Dust Contamination]]\n- [[Risks/Power Supply Interruption]]\n\n## Notes\n\nProduces water that feeds [[Technologies/Water Electrolysis]], enabling the hydrogen-oxygen cycle.",
+      "path": "Technologies/Water Ice Extraction.md",
+      "cost": {
+        "development": 2800000,
+        "operation": 450000
+      },
+      "budget": null,
+      "duration": "20 months",
+      "deadline": null,
+      "attachments": [
+        {
+          "id": "att-equipment-wear",
+          "kind": "risk",
+          "label": "Equipment Wear",
+          "body": "# Equipment Wear\n\n## Description\n\nSevere abrasion of mechanical components (auger teeth, seals, conveyor belts, valve seats) caused by the angular, glass-like particles in lunar regolith. Wear rates significantly exceed terrestrial analogues due to the lack of water-rounded particle edges.\n\n## Probability\n\n- [ ] Low\n- [x] Medium\n- [ ] High\n\n## Impact\n\n- [ ] Low\n- [x] Medium\n- [ ] High\n\n## Root Causes\n\n- Regolith particle angularity (no erosional rounding)\n- High hardness of ilmenite and pyroxene grains\n- No lubrication possible in vacuum (conventional lubricants outgas)\n\n## Mitigation\n\n- Ceramic or tungsten-carbide coated tool surfaces\n- Dry lubricants (MoS₂, PTFE-impregnated bearings) validated for vacuum\n- Modular/replaceable wear elements — design for field swap\n- Condition monitoring (vibration, current draw) to detect wear onset\n\n## Notes\n\nWorks synergistically with [[Risks/Dust Contamination]] — fine abrasive dust generated by excavation causes secondary wear on seals and optical surfaces downstream.",
+          "probability": "medium",
+          "impact": "medium",
+          "url": null
+        },
+        {
+          "id": "att-power-supply-interruption",
+          "kind": "risk",
+          "label": "Power Supply Interruption",
+          "body": "# Power Supply Interruption\n\n## Description\n\nLoss or significant reduction of electrical power during the 14-day lunar night halts all ISRU operations and may cause irreversible damage to thermal systems held above ambient temperature.\n\n## Probability\n\n- [ ] Low\n- [ ] Medium\n- [x] High\n\n## Impact\n\n- [ ] Low\n- [ ] Medium\n- [x] High\n\n## Root Causes\n\n- Solar array failure (dust, meteorite impact, pointing error)\n- Battery/RFC depletion during extended outage\n- Fission Surface Power system fault\n- Grid distribution fault isolating a subsystem\n\n## Mitigation\n\n- Redundant power generation (solar + RFC or solar + FSP)\n- Graceful shutdown procedures for all ISRU processes on power loss\n- Thermal battery for critical hold temperatures on reactors\n- Load-shedding priority: life support > power > ISRU production\n\n## Notes\n\nThis is a top-level system risk. [[Capabilities/Generate Power]] must be designed with N+1 redundancy.",
+          "probability": "high",
+          "impact": "high",
+          "url": null
+        }
+      ]
+    },
+    {
+      "id": "water-electrolysis",
+      "label": "Water Electrolysis",
+      "type": "tech",
+      "status": "active",
+      "trl": 5,
+      "phaseId": "phase-2",
+      "tags": [
+        "water",
+        "electrolysis"
+      ],
+      "body": "# Water Electrolysis\n\n## Description\n\nElectrochemical splitting of water into hydrogen and oxygen using an electrical current. Produces hydrogen for use as a reductant in hydrogen reduction processes and oxygen as a direct ISRU product. Well-established terrestrially; lunar adaptation requires operation under vacuum and low-gravity conditions.\n\n## Inputs\n\n- Water (liquid or from melted ice)\n- Electrical power (solar or nuclear)\n\n## Outputs\n\n- Hydrogen (recycled back to Hydrogen Reduction reactor)\n- Oxygen (collected and compressed)\n\n## Parameters\n\n- Power (kW): 1–5 (lab scale)\n- Efficiency (%): 70–85 (energy to hydrogen)\n- Operating temperature: 50–80°C (PEM), 700–900°C (SOEC)\n- Pressure: 1–30 bar\n\n## Technology Variants\n\n- **PEM (Proton Exchange Membrane)** — compact, fast response, TRL 8+ on Earth\n- **SOEC (Solid Oxide Electrolysis Cell)** — higher efficiency at elevated temperature, better suited to co-electrolysis of CO₂+H₂O\n\n## TRL Justification\n\nPEM electrolysis is TRL 9 on Earth. Lunar adaptation (vacuum operation, reduced gravity, regolith-contaminated water input) brings effective TRL to 5.\n\n## Key Experiments\n\n- [[Experiments/Water Electrolysis Bench Test]]\n\n## Notes\n\nHydrogen produced here feeds the [[Technologies/Hydrogen Reduction]] process, closing the reagent loop.",
+      "path": "Technologies/Water Electrolysis.md",
+      "cost": {
+        "development": 1200000,
+        "operation": 150000
+      },
+      "budget": null,
+      "duration": "12 months",
+      "deadline": null,
+      "attachments": [
+        {
+          "id": "att-electrolysis-efficiency-data",
+          "kind": "evidence",
+          "label": "Electrolysis Efficiency Data",
+          "body": "# Electrolysis Efficiency Data\n\n## Description\n\nFaradaic efficiency, gas purity, and membrane degradation results from the Water Electrolysis Bench Test campaign. Provides quantitative support for the PEM electrolysis approach in lunar ISRU contexts.\n\n## Source Experiment\n\n- [[Experiments/Water Electrolysis Bench Test]]\n\n## Key Findings\n\n- Peak Faradaic efficiency: 94.2% at 0.8 A/cm²\n- O₂ purity: 99.7% at nominal operating point; drops to 98.1% at maximum current\n- Membrane conductivity loss: 3.8% after 100-hour run with mineral-doped water\n- Operating regime confirmed: 0.5–1.2 A/cm² balances efficiency and longevity\n\n## Confidence Level\n\nMedium — bench scale, Earth gravity, controlled inlet water chemistry\n\n## Implications\n\nConfirms PEM electrolysis viability for ISRU hydrogen supply. Recommends upstream water purification step to protect membrane lifetime. Supports hydrogen production rate estimates for [[Technologies/Hydrogen Reduction]] mass balance.\n\n## Notes",
+          "probability": null,
+          "impact": null,
+          "url": null
+        },
+        {
+          "id": "att-water-electrolysis-bench-test",
+          "kind": "experiment",
+          "label": "Water Electrolysis Bench Test",
+          "body": "# Water Electrolysis Bench Test\n\n## Description\n\nBench-scale demonstration of PEM water electrolysis under simulated lunar operating conditions: low-pressure inlet water, variable load profile, and characterisation of membrane degradation with regolith-contaminated water.\n\n## Objective\n\nMeasure Faradaic efficiency and gas purity at varying current densities and water quality levels; quantify membrane degradation rate from dissolved minerals in ISRU-derived water.\n\n## Methodology\n\n1. Deionised baseline run at rated current — establish reference efficiency\n2. Introduce mineral-doped water (matching simulated ISRU water chemistry)\n3. Step current density from 0.1 to 2.0 A/cm²; measure H₂/O₂ flow and purity\n4. 100-hour endurance run at design point; inspect membrane post-test\n\n## Success Criteria\n\n- Faradaic efficiency > 90% at design current density\n- O₂ purity > 99.5% throughout\n- Membrane shows <5% conductivity loss after 100 hours\n\n## Required Infrastructure\n\n- [[Infrastructure/Vacuum Furnace]] (for low-pressure water pre-treatment)\n- Electrolysis Test Rig (PEM stack, power supply, gas analyser)\n\n## Risks\n\n- [[Risks/Insufficient Heating Efficiency]]\n\n## Notes\n\nResults feed directly into [[Technologies/Water Electrolysis]] TRL assessment and inform water purification requirements for ISRU systems.",
+          "probability": null,
+          "impact": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "id": "hydrogen-reduction",
+      "label": "Hydrogen Reduction (Ilmenite)",
+      "type": "tech",
+      "status": "active",
+      "trl": 4,
+      "phaseId": "phase-2",
+      "tags": [
+        "ilmenite",
+        "oxygen"
+      ],
+      "body": "# Hydrogen Reduction\n\n## Description\n\nReduction of iron oxides in lunar regolith using hydrogen at elevated temperatures. Produces water which is then electrolyzed to yield oxygen and recycle hydrogen.\n\n## Inputs\n\n- Regolith (ilmenite-rich preferred)\n- Hydrogen (recycled)\n\n## Outputs\n\n- Oxygen\n- Water (intermediate)\n\n## Parameters\n\n- Power (kW): 5-10 (lab scale)\n- Temperature: 900-1100°C\n- Yield (%): 5-15 (oxygen extraction from bulk regolith)\n- Complexity: Medium\n\n## TRL Justification\n\nDemonstrated in laboratory with simulated regolith. Multiple research groups have achieved 5-15% oxygen yield.\n\n## Key Experiments\n\n- [[Experiments/Vacuum Chamber Pyrolysis Test]]\n\n## Risks\n\n- [[Risks/Insufficient Heating Efficiency]]\n\n## Notes",
+      "path": "Technologies/Hydrogen Reduction.md",
+      "cost": {
+        "development": 3000000,
+        "operation": 500000
+      },
+      "budget": null,
+      "duration": "24 months",
+      "deadline": null,
+      "attachments": [
+        {
+          "id": "att-electrolysis-efficiency-data",
+          "kind": "evidence",
+          "label": "Electrolysis Efficiency Data",
+          "body": "# Electrolysis Efficiency Data\n\n## Description\n\nFaradaic efficiency, gas purity, and membrane degradation results from the Water Electrolysis Bench Test campaign. Provides quantitative support for the PEM electrolysis approach in lunar ISRU contexts.\n\n## Source Experiment\n\n- [[Experiments/Water Electrolysis Bench Test]]\n\n## Key Findings\n\n- Peak Faradaic efficiency: 94.2% at 0.8 A/cm²\n- O₂ purity: 99.7% at nominal operating point; drops to 98.1% at maximum current\n- Membrane conductivity loss: 3.8% after 100-hour run with mineral-doped water\n- Operating regime confirmed: 0.5–1.2 A/cm² balances efficiency and longevity\n\n## Confidence Level\n\nMedium — bench scale, Earth gravity, controlled inlet water chemistry\n\n## Implications\n\nConfirms PEM electrolysis viability for ISRU hydrogen supply. Recommends upstream water purification step to protect membrane lifetime. Supports hydrogen production rate estimates for [[Technologies/Hydrogen Reduction]] mass balance.\n\n## Notes",
+          "probability": null,
+          "impact": null,
+          "url": null
+        },
+        {
+          "id": "att-laboratory-results",
+          "kind": "evidence",
+          "label": "Laboratory Results",
+          "body": "# Laboratory Results\n\n## Description\n\nMass spectrometry data and yield calculations from vacuum chamber pyrolysis tests on JSC-1A lunar simulant.\n\n## Source Experiment\n\n- [[Experiments/Vacuum Chamber Pyrolysis Test]]\n\n## Date Collected\n\n2025-03-15\n\n## Key Findings\n\n- Peak oxygen yield: 8.2% at 1050°C\n- Reproducible within ±0.5% across 6 runs\n- Water production confirmed as intermediate\n\n## Confidence Level\n\nMedium — simulant only, not real regolith\n\n## Notes",
+          "probability": null,
+          "impact": null,
+          "url": null
+        },
+        {
+          "id": "att-vacuum-chamber-pyrolysis-test",
+          "kind": "experiment",
+          "label": "Vacuum Chamber Pyrolysis Test",
+          "body": "# Vacuum Chamber Pyrolysis Test\n\n## Description\n\nLaboratory-scale demonstration of hydrogen reduction of lunar regolith simulant under vacuum conditions.\n\n## Objective\n\nMeasure oxygen yield from hydrogen reduction of JSC-1A lunar simulant at varying temperatures.\n\n## Methodology\n\n1. Load simulant into vacuum furnace\n2. Heat to target temperature under vacuum\n3. Introduce hydrogen flow\n4. Measure off-gas composition via mass spectrometry\n\n## Success Criteria\n\n- Oxygen yield > 5%\n- Reproducible across 5 runs\n\n## Required Infrastructure\n\n- [[Infrastructure/Vacuum Furnace]]\n\n## Expected Evidence\n\n- Gas composition data\n- Yield vs temperature curves\n- Material characterization of residue\n\n## Risks\n\n- [[Risks/Insufficient Heating Efficiency]]\n\n## Notes",
+          "probability": null,
+          "impact": null,
+          "url": null
+        },
+        {
+          "id": "att-insufficient-heating-efficiency",
+          "kind": "risk",
+          "label": "Insufficient Heating Efficiency",
+          "body": "# Insufficient Heating Efficiency\n\n## Description\n\nThermal losses in vacuum environment reduce process efficiency and increase power requirements beyond available supply.\n\n## Probability\n\n- [ ] Low\n- [x] Medium\n- [ ] High\n\n## Impact\n\n- [ ] Low\n- [x] High\n\n## Mitigation\n\n- Invest in advanced insulation materials\n- Optimize reactor geometry\n- Consider inductive or microwave heating alternatives\n\n## Affected Nodes\n\n- [[Experiments/Vacuum Chamber Pyrolysis Test]]\n- [[Technologies/Hydrogen Reduction]]\n- [[Technologies/Molten Regolith Electrolysis]]\n\n## Notes",
+          "probability": "medium",
+          "impact": "high",
+          "url": null
+        },
+        {
+          "id": "att-power-supply-interruption",
+          "kind": "risk",
+          "label": "Power Supply Interruption",
+          "body": "# Power Supply Interruption\n\n## Description\n\nLoss or significant reduction of electrical power during the 14-day lunar night halts all ISRU operations and may cause irreversible damage to thermal systems held above ambient temperature.\n\n## Probability\n\n- [ ] Low\n- [ ] Medium\n- [x] High\n\n## Impact\n\n- [ ] Low\n- [ ] Medium\n- [x] High\n\n## Root Causes\n\n- Solar array failure (dust, meteorite impact, pointing error)\n- Battery/RFC depletion during extended outage\n- Fission Surface Power system fault\n- Grid distribution fault isolating a subsystem\n\n## Mitigation\n\n- Redundant power generation (solar + RFC or solar + FSP)\n- Graceful shutdown procedures for all ISRU processes on power loss\n- Thermal battery for critical hold temperatures on reactors\n- Load-shedding priority: life support > power > ISRU production\n\n## Notes\n\nThis is a top-level system risk. [[Capabilities/Generate Power]] must be designed with N+1 redundancy.",
+          "probability": "high",
+          "impact": "high",
+          "url": null
+        }
+      ]
+    },
+    {
+      "id": "molten-regolith-electrolysis",
+      "label": "Molten Regolith Electrolysis",
+      "type": "tech",
+      "status": "active",
+      "trl": 3,
+      "phaseId": "phase-2",
+      "tags": [
+        "electrolysis",
+        "high-temp"
+      ],
+      "body": "# Molten Regolith Electrolysis\n\n## Description\n\nDirect electrolysis of molten regolith to produce oxygen at the anode and metal alloys at the cathode. Eliminates the need for consumable reactants.\n\n## Inputs\n\n- Regolith\n- Electrical power\n\n## Outputs\n\n- Oxygen\n- Iron\n- Silicon\n\n## Parameters\n\n- Power (kW): 10-20 (lab scale)\n- Temperature: 1500-1700°C\n- Yield (%): 20-30 (oxygen extraction)\n- Complexity: High\n\n## TRL Justification\n\nDemonstrated in laboratory at small scale. Challenges remain with electrode degradation and melt management.\n\n## Key Experiments\n\n- [[Experiments/Vacuum Chamber Pyrolysis Test]]\n\n## Risks\n\n- [[Risks/Insufficient Heating Efficiency]]\n\n## Notes",
+      "path": "Technologies/Molten Regolith Electrolysis.md",
+      "cost": {
+        "development": 4000000,
+        "operation": 800000
+      },
+      "budget": null,
+      "duration": "30 months",
+      "deadline": null,
+      "attachments": [
+        {
+          "id": "att-vacuum-chamber-pyrolysis-test",
+          "kind": "experiment",
+          "label": "Vacuum Chamber Pyrolysis Test",
+          "body": "# Vacuum Chamber Pyrolysis Test\n\n## Description\n\nLaboratory-scale demonstration of hydrogen reduction of lunar regolith simulant under vacuum conditions.\n\n## Objective\n\nMeasure oxygen yield from hydrogen reduction of JSC-1A lunar simulant at varying temperatures.\n\n## Methodology\n\n1. Load simulant into vacuum furnace\n2. Heat to target temperature under vacuum\n3. Introduce hydrogen flow\n4. Measure off-gas composition via mass spectrometry\n\n## Success Criteria\n\n- Oxygen yield > 5%\n- Reproducible across 5 runs\n\n## Required Infrastructure\n\n- [[Infrastructure/Vacuum Furnace]]\n\n## Expected Evidence\n\n- Gas composition data\n- Yield vs temperature curves\n- Material characterization of residue\n\n## Risks\n\n- [[Risks/Insufficient Heating Efficiency]]\n\n## Notes",
+          "probability": null,
+          "impact": null,
+          "url": null
+        },
+        {
+          "id": "att-insufficient-heating-efficiency",
+          "kind": "risk",
+          "label": "Insufficient Heating Efficiency",
+          "body": "# Insufficient Heating Efficiency\n\n## Description\n\nThermal losses in vacuum environment reduce process efficiency and increase power requirements beyond available supply.\n\n## Probability\n\n- [ ] Low\n- [x] Medium\n- [ ] High\n\n## Impact\n\n- [ ] Low\n- [x] High\n\n## Mitigation\n\n- Invest in advanced insulation materials\n- Optimize reactor geometry\n- Consider inductive or microwave heating alternatives\n\n## Affected Nodes\n\n- [[Experiments/Vacuum Chamber Pyrolysis Test]]\n- [[Technologies/Hydrogen Reduction]]\n- [[Technologies/Molten Regolith Electrolysis]]\n\n## Notes",
+          "probability": "medium",
+          "impact": "high",
+          "url": null
+        },
+        {
+          "id": "att-power-supply-interruption",
+          "kind": "risk",
+          "label": "Power Supply Interruption",
+          "body": "# Power Supply Interruption\n\n## Description\n\nLoss or significant reduction of electrical power during the 14-day lunar night halts all ISRU operations and may cause irreversible damage to thermal systems held above ambient temperature.\n\n## Probability\n\n- [ ] Low\n- [ ] Medium\n- [x] High\n\n## Impact\n\n- [ ] Low\n- [ ] Medium\n- [x] High\n\n## Root Causes\n\n- Solar array failure (dust, meteorite impact, pointing error)\n- Battery/RFC depletion during extended outage\n- Fission Surface Power system fault\n- Grid distribution fault isolating a subsystem\n\n## Mitigation\n\n- Redundant power generation (solar + RFC or solar + FSP)\n- Graceful shutdown procedures for all ISRU processes on power loss\n- Thermal battery for critical hold temperatures on reactors\n- Load-shedding priority: life support > power > ISRU production\n\n## Notes\n\nThis is a top-level system risk. [[Capabilities/Generate Power]] must be designed with N+1 redundancy.",
+          "probability": "high",
+          "impact": "high",
+          "url": null
+        },
+        {
+          "id": "att-vacuum-furnace",
+          "kind": "note",
+          "label": "Vacuum Furnace (lab asset)",
+          "body": "# Vacuum Furnace\n\n## Description\n\nHigh-temperature vacuum furnace capable of simulating lunar thermal environment for materials processing experiments.\n\n## Specifications\n\n- Max temperature: 1700°C\n- Vacuum: 10⁻⁶ mbar\n- Chamber volume: 50 L\n- Atmosphere: inert gas or vacuum\n\n## Used By\n\n- [[Experiments/Vacuum Chamber Pyrolysis Test]]\n\n## Location\n\nPlanetary Science Laboratory\n\n## Availability\n\nAvailable for collaborative research\n\n## Notes",
+          "probability": null,
+          "impact": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "id": "carbothermal-reduction",
+      "label": "Carbothermal Reduction",
+      "type": "tech",
+      "status": "planned",
+      "trl": 2,
+      "phaseId": "phase-2",
+      "tags": [
+        "methane-loop",
+        "oxygen"
+      ],
+      "body": "# Carbothermal Reduction\n\n## Description\n\nHigh-temperature reduction of regolith oxides using carbon or methane as a reductant. Produces CO gas which is then disproportionated (Boudouard reaction) or oxidised to recover oxygen and recycle carbon. Offers an alternative reagent loop that does not require a hydrogen supply.\n\n## Inputs\n\n- Regolith (bulk feedstock)\n- Carbon or methane (recycled reductant)\n- High-power microwave or concentrated solar heating\n\n## Outputs\n\n- Oxygen (primary product)\n- Silicon carbide / metal alloys (secondary)\n- Carbon monoxide (intermediate, recycled)\n\n## Parameters\n\n- Operating temperature: 1600–2000°C\n- Power (kW): 15–30 (lab scale)\n- Oxygen yield (%): 15–25\n\n## Key Challenges\n\n- Extremely high temperatures demand refractory containment materials\n- Carbon loss through SiC formation reduces cycle efficiency\n- Process control at lunar temperatures is complex\n\n## TRL Justification\n\nProof-of-concept demonstrations with methane and simulant in laboratory. Significant engineering challenges remain before pilot-scale testing.\n\n## Risks\n\n- [[Risks/Insufficient Heating Efficiency]]\n\n## Notes\n\nCompetes with [[Technologies/Hydrogen Reduction]] and [[Technologies/Molten Regolith Electrolysis]] as an independent pathway that avoids dependence on water-derived hydrogen.",
+      "path": "Technologies/Carbothermal Reduction.md",
+      "cost": {
+        "development": 3500000,
+        "operation": 600000
+      },
+      "budget": null,
+      "duration": "26 months",
+      "deadline": null,
+      "attachments": [
+        {
+          "id": "att-insufficient-heating-efficiency",
+          "kind": "risk",
+          "label": "Insufficient Heating Efficiency",
+          "body": "# Insufficient Heating Efficiency\n\n## Description\n\nThermal losses in vacuum environment reduce process efficiency and increase power requirements beyond available supply.\n\n## Probability\n\n- [ ] Low\n- [x] Medium\n- [ ] High\n\n## Impact\n\n- [ ] Low\n- [x] High\n\n## Mitigation\n\n- Invest in advanced insulation materials\n- Optimize reactor geometry\n- Consider inductive or microwave heating alternatives\n\n## Affected Nodes\n\n- [[Experiments/Vacuum Chamber Pyrolysis Test]]\n- [[Technologies/Hydrogen Reduction]]\n- [[Technologies/Molten Regolith Electrolysis]]\n\n## Notes",
+          "probability": "medium",
+          "impact": "high",
+          "url": null
+        }
+      ]
+    },
+    {
+      "id": "cryogenic-propellant-storage",
+      "label": "Cryogenic Storage & Liquefaction",
+      "type": "tech",
+      "status": "planned",
+      "trl": 3,
+      "phaseId": "phase-3",
+      "tags": [
+        "cryogenics"
+      ],
+      "body": "# Cryogenic Propellant Storage\n\n## Description\n\nLiquefaction, storage, and transfer of oxygen (LOX) and hydrogen (LH2) produced from lunar ISRU operations. The lunar thermal environment — extreme day/night cycles and vacuum — poses unique challenges for cryogenic fluid management with minimal boil-off.\n\n## Inputs\n\n- Gaseous oxygen from ISRU processes\n- Gaseous hydrogen from water electrolysis\n- Electrical power for compression and refrigeration\n\n## Outputs\n\n- Liquid Oxygen (LOX) at −183°C\n- Liquid Hydrogen (LH2) at −253°C\n\n## Parameters\n\n- Storage pressure: 3–10 bar (subcooled LOX), 2–5 bar (slush LH2)\n- Boil-off rate target: <0.1%/day with active refrigeration\n- Power (kW): 5–15 (liquefaction and active cooling)\n\n## Key Challenges\n\n- Achieving near-zero boil-off on a body with no convective cooling\n- Thermal cycling from 14-day lunar day/night\n- Seals and valves rated for cryogenic vacuum service\n- Long-term material compatibility under radiation exposure\n\n## TRL Justification\n\nLOX storage well-studied; LH2 at this scale in lunar environment is TRL 3. Active zero-boil-off demonstrations planned for Gateway.\n\n## Risks\n\n- [[Risks/Power Supply Interruption]]\n\n## Notes\n\nBridges the gap between ISRU gas production ([[Capabilities/Produce Oxygen]]) and flight-ready propellant loading ([[Goals/Propellant Production]]).",
+      "path": "Technologies/Cryogenic Propellant Storage.md",
+      "cost": {
+        "development": 5000000,
+        "operation": 900000
+      },
+      "budget": null,
+      "duration": "24 months",
+      "deadline": null,
+      "attachments": [
+        {
+          "id": "att-power-supply-interruption",
+          "kind": "risk",
+          "label": "Power Supply Interruption",
+          "body": "# Power Supply Interruption\n\n## Description\n\nLoss or significant reduction of electrical power during the 14-day lunar night halts all ISRU operations and may cause irreversible damage to thermal systems held above ambient temperature.\n\n## Probability\n\n- [ ] Low\n- [ ] Medium\n- [x] High\n\n## Impact\n\n- [ ] Low\n- [ ] Medium\n- [x] High\n\n## Root Causes\n\n- Solar array failure (dust, meteorite impact, pointing error)\n- Battery/RFC depletion during extended outage\n- Fission Surface Power system fault\n- Grid distribution fault isolating a subsystem\n\n## Mitigation\n\n- Redundant power generation (solar + RFC or solar + FSP)\n- Graceful shutdown procedures for all ISRU processes on power loss\n- Thermal battery for critical hold temperatures on reactors\n- Load-shedding priority: life support > power > ISRU production\n\n## Notes\n\nThis is a top-level system risk. [[Capabilities/Generate Power]] must be designed with N+1 redundancy.",
+          "probability": "high",
+          "impact": "high",
+          "url": null
+        }
+      ]
+    },
+    {
+      "id": "propellant",
+      "label": "LOX/LH₂ Propellant",
+      "type": "asset",
+      "status": "planned",
+      "trl": null,
+      "phaseId": "phase-4",
+      "tags": [
+        "fuel",
+        "oxidizer"
+      ],
+      "body": "Liquefied oxygen and hydrogen, stored cryogenically — the end product enabling refueling of ascent vehicles and a cislunar economy.",
+      "path": "",
+      "cost": null,
+      "budget": null,
+      "duration": null,
+      "deadline": null,
+      "attachments": []
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "source": "regolith-excavation",
+      "target": "regolith",
+      "relation": "flow"
+    },
+    {
+      "id": "e1",
+      "source": "regolith-excavation",
+      "target": "water-ice-extraction",
+      "relation": "flow"
+    },
+    {
+      "id": "e2",
+      "source": "surface-power",
+      "target": "water-ice-extraction",
+      "relation": "flow"
+    },
+    {
+      "id": "e3",
+      "source": "water-ice-extraction",
+      "target": "water",
+      "relation": "flow"
+    },
+    {
+      "id": "e4",
+      "source": "water",
+      "target": "water-electrolysis",
+      "relation": "flow"
+    },
+    {
+      "id": "e5",
+      "source": "surface-power",
+      "target": "water-electrolysis",
+      "relation": "flow"
+    },
+    {
+      "id": "e6",
+      "source": "water-electrolysis",
+      "target": "hydrogen",
+      "relation": "flow"
+    },
+    {
+      "id": "e7",
+      "source": "water-electrolysis",
+      "target": "oxygen",
+      "relation": "flow"
+    },
+    {
+      "id": "e8",
+      "source": "regolith",
+      "target": "hydrogen-reduction",
+      "relation": "flow"
+    },
+    {
+      "id": "e9",
+      "source": "hydrogen",
+      "target": "hydrogen-reduction",
+      "relation": "flow"
+    },
+    {
+      "id": "e13",
+      "source": "regolith",
+      "target": "molten-regolith-electrolysis",
+      "relation": "flow"
+    },
+    {
+      "id": "e14",
+      "source": "surface-power",
+      "target": "molten-regolith-electrolysis",
+      "relation": "flow"
+    },
+    {
+      "id": "e15",
+      "source": "molten-regolith-electrolysis",
+      "target": "oxygen",
+      "relation": "flow"
+    },
+    {
+      "id": "e17",
+      "source": "regolith",
+      "target": "carbothermal-reduction",
+      "relation": "flow"
+    },
+    {
+      "id": "e18",
+      "source": "surface-power",
+      "target": "carbothermal-reduction",
+      "relation": "flow"
+    },
+    {
+      "id": "e19",
+      "source": "carbothermal-reduction",
+      "target": "oxygen",
+      "relation": "flow"
+    },
+    {
+      "id": "e20",
+      "source": "oxygen",
+      "target": "cryogenic-propellant-storage",
+      "relation": "flow"
+    },
+    {
+      "id": "e21",
+      "source": "hydrogen",
+      "target": "cryogenic-propellant-storage",
+      "relation": "flow"
+    },
+    {
+      "id": "e22",
+      "source": "surface-power",
+      "target": "cryogenic-propellant-storage",
+      "relation": "flow"
+    },
+    {
+      "id": "e23",
+      "source": "oxygen",
+      "target": "lunar-oxygen-production",
+      "relation": "flow"
+    },
+    {
+      "id": "e24",
+      "source": "lunar-oxygen-production",
+      "target": "propellant-production",
+      "relation": "flow"
+    },
+    {
+      "id": "e-hr-o2",
+      "source": "hydrogen-reduction",
+      "target": "oxygen",
+      "relation": "flow"
+    },
+    {
+      "id": "e-cryo-prop",
+      "source": "cryogenic-propellant-storage",
+      "target": "propellant",
+      "relation": "flow"
+    },
+    {
+      "id": "e-prop-goal",
+      "source": "propellant",
+      "target": "propellant-production",
+      "relation": "flow"
+    }
+  ],
+  "phases": [
+    {
+      "id": "phase-1",
+      "name": "Foundation",
+      "order": 0,
+      "color": null,
+      "description": "Site prep, power, excavation"
+    },
+    {
+      "id": "phase-2",
+      "name": "Extraction",
+      "order": 1,
+      "color": null,
+      "description": "Water + oxygen extraction from regolith"
+    },
+    {
+      "id": "phase-3",
+      "name": "Production",
+      "order": 2,
+      "color": null,
+      "description": "Demo-scale O₂ production and storage"
+    },
+    {
+      "id": "phase-4",
+      "name": "Scale-up",
+      "order": 3,
+      "color": null,
+      "description": "Sustained propellant supply"
+    }
+  ],
+  "meta": {
+    "generated": "2026-06-10T20:17:17.778Z",
+    "nodeCount": 15,
+    "edgeCount": 24
+  }
+}

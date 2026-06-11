@@ -1,0 +1,260 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Theme tokens (always dark) ─────────────────────────────────────────────── */
+@layer base {
+  :root {
+    /* shadcn/Tailwind colour tokens — HSL components, no hash */
+    --background: 240 57% 8%;
+    --foreground: 240 17% 93%;
+    --card: 240 44% 12%;
+    --card-foreground: 240 17% 93%;
+    --popover: 240 44% 12%;
+    --popover-foreground: 240 17% 93%;
+    --primary: 28 80% 52%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 38% 16%;
+    --secondary-foreground: 240 17% 93%;
+    --muted: 240 38% 16%;
+    --muted-foreground: 0 0% 53%;
+    --accent: 240 28% 23%;
+    --accent-foreground: 240 17% 93%;
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 28% 23%;
+    --input: 240 28% 28%;
+    --ring: 28 80% 52%;
+    --radius: 0.375rem;
+
+    /* Layout sizing (used by the app shell only) */
+    --topbar-h: 46px;
+    --status-h: 26px;
+    --sidebar-w: 220px;
+    --panel-w: 360px;
+
+    /* Graph design tokens — concrete colors (mirror NODE_COLORS / STATUS_COLORS /
+       RELATION_COLORS / READINESS_COLORS in src/types.ts, which feed SVG attrs) */
+    --surface-deep: #0d0d1a;
+    --surface-card: #16162a;
+    --border-subtle: #2b2b45;
+    --node-goal:  #d9a441;
+    --node-tech:  #5b9dd9;
+    --node-asset: #4dab84;
+    --state-blocked:  #5a6072;
+    --state-ready:    #62d9a2;
+    --state-progress: #e0913f;
+    --state-done:     #48b27a;
+    --column-band-base: #8a93c4;
+    --column-divider: #3a3a58;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-size: 13px;
+}
+
+/* ── App shell ─────────────────────────────────────────────────────────────── */
+.app-shell {
+  display: grid;
+  grid-template-rows: var(--topbar-h) 1fr var(--status-h);
+  height: 100%;
+}
+
+.main-area {
+  display: flex;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.graph-container {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  background: hsl(var(--background));
+}
+
+/* ── Topbar ─────────────────────────────────────────────────────────────────── */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 14px;
+  background: hsl(var(--card));
+  border-bottom: 1px solid hsl(var(--border));
+  z-index: 10;
+}
+
+.topbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-weight: 700;
+  font-size: 14px;
+  color: hsl(var(--foreground));
+  white-space: nowrap;
+  user-select: none;
+}
+
+.logo-icon { color: hsl(var(--primary)); font-size: 16px; }
+
+/* ── Status bar ─────────────────────────────────────────────────────────────── */
+.statusbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 14px;
+  font-size: 11px;
+  color: hsl(var(--muted-foreground));
+  background: hsl(var(--card));
+  border-top: 1px solid hsl(var(--border));
+  z-index: 10;
+}
+.statusbar strong { color: hsl(var(--foreground)); }
+
+/* ── Markdown body (DetailPanel) ────────────────────────────────────────────── */
+.detail-body {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #ccc;
+}
+.detail-body h1, .detail-body h2, .detail-body h3 {
+  font-size: 13px;
+  font-weight: 700;
+  color: hsl(var(--foreground));
+  margin: 10px 0 4px;
+}
+.detail-body h1 { font-size: 14px; }
+.detail-body p { margin-bottom: 6px; }
+.detail-body ul, .detail-body ol { padding-left: 16px; margin-bottom: 6px; }
+.detail-body li { margin-bottom: 2px; }
+.detail-body code {
+  background: hsl(var(--secondary));
+  border-radius: 3px;
+  padding: 1px 4px;
+  font-family: monospace;
+  font-size: 11px;
+}
+.detail-body pre {
+  background: hsl(var(--secondary));
+  border-radius: 5px;
+  padding: 8px;
+  overflow-x: auto;
+  margin-bottom: 6px;
+}
+.detail-body a { color: hsl(var(--primary)); text-decoration: none; }
+.detail-body a:hover { text-decoration: underline; }
+.detail-body table { width: 100%; border-collapse: collapse; font-size: 11px; }
+.detail-body th, .detail-body td { border: 1px solid hsl(var(--border)); padding: 4px 6px; }
+.detail-body th { background: hsl(var(--secondary)); }
+/* hide raw h1 heading — shown in header */
+.detail-body > :first-child:is(h1) { display: none; }
+
+/* ── Node connection handles ────────────────────────────────────────────────── */
+/* Hidden by default; appear as colored dots on node hover so users can see
+   where to drag to create a new connection. */
+.node-handle {
+  opacity: 0 !important;
+  transition: opacity 0.15s, transform 0.15s !important;
+  width: 11px !important;
+  height: 11px !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+}
+.react-flow__node:hover .node-handle {
+  opacity: 0.85 !important;
+}
+.node-handle:hover {
+  opacity: 1 !important;
+  width: 15px !important;
+  height: 15px !important;
+}
+
+/* ── Phase column headers (sticky overlay above the canvas) ─────────────────── */
+.column-headers {
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 100%;
+  height: 34px;
+  overflow: hidden;
+  z-index: 5;
+}
+.column-header-chip {
+  position: absolute;
+  top: 6px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 8px;
+  border: 1px solid color-mix(in srgb, var(--phase-accent) 35%, transparent);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--phase-accent) 12%, hsl(var(--card) / 0.85));
+  color: hsl(var(--foreground));
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s;
+}
+.column-header-chip:hover {
+  background: color-mix(in srgb, var(--phase-accent) 24%, hsl(var(--card) / 0.9));
+}
+.column-header-name { overflow: hidden; text-overflow: ellipsis; }
+.column-header-count {
+  font-size: 9px;
+  font-weight: 600;
+  color: hsl(var(--muted-foreground));
+}
+
+/* ── Edge label pills (clickable → relation popover) ────────────────────────── */
+.edge-label-pill {
+  font-size: 9px;
+  font-weight: 600;
+  background: var(--surface-deep);
+  border: 1px solid transparent;
+  padding: 1px 4px;
+  border-radius: 3px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: opacity 0.15s, border-color 0.15s;
+}
+.edge-label-pill:hover {
+  border-color: currentColor;
+}
+
+/* ── React Flow overrides ───────────────────────────────────────────────────── */
+.react-flow__pane,
+.react-flow__node { outline: none; }
+.react-flow {
+  --xy-background-color: hsl(var(--background));
+  --xy-edge-stroke-default: #6d7488;
+  --xy-attribution-background-color-default: transparent;
+}
+.react-flow__controls button {
+  background: hsl(var(--card)) !important;
+  border-color: hsl(var(--border)) !important;
+  color: hsl(var(--muted-foreground)) !important;
+}
+.react-flow__controls button:hover {
+  background: hsl(var(--secondary)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+.react-flow__controls svg { fill: currentColor !important; }
+
+/* ── Scrollbar ──────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: hsl(var(--card)); }
+::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #444; }

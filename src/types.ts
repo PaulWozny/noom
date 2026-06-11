@@ -103,7 +103,7 @@ export const STATUS_COLORS: Record<StatusType, string> = {
 }
 
 export const RELATION_COLORS: Record<RelationType, string> = {
-  flow:    '#a8b0c2',
+  flow:    '#8b93a7',
   related: '#6d7488',
 }
 
@@ -114,7 +114,7 @@ export const RELATION_LABELS: Record<RelationType, string> = {
 
 export const READINESS_COLORS: Record<ReadinessState, string> = {
   blocked:       '#5a6072',
-  ready:         '#62d9a2',
+  ready:         '#3dbd8a',
   'in-progress': '#e0913f',
   done:          '#48b27a',
 }

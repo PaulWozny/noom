@@ -1,7 +1,14 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      // apply the saved (or OS-preferred) theme before first paint
+      const t = localStorage.getItem('lunar-roadmap:theme')
+      if (t === 'dark' || (t !== 'light' && !matchMedia('(prefers-color-scheme: light)').matches)) {
+        document.documentElement.classList.add('dark')
+      }
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Lunar Roadmap — an editable, game-style tech tree for planning a lunar economy: phases, dependencies, readiness states and alternatives." />
     <title>Lunar Roadmap</title>

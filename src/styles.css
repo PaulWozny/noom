@@ -2,10 +2,59 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Theme tokens (always dark) ─────────────────────────────────────────────── */
+/* ── Theme tokens — :root is light, .dark overrides ─────────────────────────── */
 @layer base {
   :root {
     /* shadcn/Tailwind colour tokens — HSL components, no hash */
+    --background: 226 40% 97%;
+    --foreground: 230 25% 16%;
+    --card: 0 0% 100%;
+    --card-foreground: 230 25% 16%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 230 25% 16%;
+    --primary: 28 80% 48%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 226 30% 92%;
+    --secondary-foreground: 230 25% 16%;
+    --muted: 226 30% 92%;
+    --muted-foreground: 228 12% 45%;
+    --accent: 226 30% 88%;
+    --accent-foreground: 230 25% 16%;
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 228 20% 84%;
+    --input: 228 20% 78%;
+    --ring: 28 80% 48%;
+    --radius: 0.375rem;
+
+    /* Layout sizing (used by the app shell only) */
+    --topbar-h: 46px;
+    --status-h: 26px;
+    --sidebar-w: 220px;
+    --panel-w: 360px;
+
+    /* Graph design tokens — concrete colors (mirror NODE_COLORS / STATUS_COLORS /
+       RELATION_COLORS / READINESS_COLORS in src/types.ts, which feed SVG attrs) */
+    --surface-deep: #e8ebf4;
+    --surface-card: #ffffff;
+    --border-subtle: #c9cede;
+    --node-goal:  #d9a441;
+    --node-tech:  #5b9dd9;
+    --node-asset: #4dab84;
+    --state-blocked:  #5a6072;
+    --state-ready:    #2faa78;
+    --state-progress: #e0913f;
+    --state-done:     #48b27a;
+    --column-band-base: #5b6395;
+    --column-divider: #b9bfd4;
+    --node-text: #1d2233;
+    --node-text-subtle: #5a6378;
+    --node-selected-border: #1d2233;
+    --trl-track: rgba(20, 25, 50, 0.12);
+    --trl-fill: rgba(20, 25, 50, 0.55);
+  }
+
+  .dark {
     --background: 240 57% 8%;
     --foreground: 240 17% 93%;
     --card: 240 44% 12%;
@@ -25,28 +74,18 @@
     --border: 240 28% 23%;
     --input: 240 28% 28%;
     --ring: 28 80% 52%;
-    --radius: 0.375rem;
 
-    /* Layout sizing (used by the app shell only) */
-    --topbar-h: 46px;
-    --status-h: 26px;
-    --sidebar-w: 220px;
-    --panel-w: 360px;
-
-    /* Graph design tokens — concrete colors (mirror NODE_COLORS / STATUS_COLORS /
-       RELATION_COLORS / READINESS_COLORS in src/types.ts, which feed SVG attrs) */
     --surface-deep: #0d0d1a;
     --surface-card: #16162a;
     --border-subtle: #2b2b45;
-    --node-goal:  #d9a441;
-    --node-tech:  #5b9dd9;
-    --node-asset: #4dab84;
-    --state-blocked:  #5a6072;
     --state-ready:    #62d9a2;
-    --state-progress: #e0913f;
-    --state-done:     #48b27a;
     --column-band-base: #8a93c4;
     --column-divider: #3a3a58;
+    --node-text: #ffffff;
+    --node-text-subtle: #aab;
+    --node-selected-border: #ffffff;
+    --trl-track: rgba(255, 255, 255, 0.15);
+    --trl-fill: rgba(255, 255, 255, 0.7);
   }
 }
 
@@ -123,7 +162,7 @@ html, body, #root {
 .detail-body {
   font-size: 12px;
   line-height: 1.6;
-  color: #ccc;
+  color: hsl(var(--foreground) / 0.85);
 }
 .detail-body h1, .detail-body h2, .detail-body h3 {
   font-size: 13px;
@@ -257,4 +296,4 @@ html, body, #root {
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: hsl(var(--card)); }
 ::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #444; }
+::-webkit-scrollbar-thumb:hover { background: hsl(var(--muted-foreground) / 0.5); }

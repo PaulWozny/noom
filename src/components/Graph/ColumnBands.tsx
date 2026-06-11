@@ -19,6 +19,9 @@ export const ColumnBands = memo(function ColumnBands({ columns, bandY, hoverPhas
     <ViewportPortal>
       {columns.map(col => {
         const tint = col.color ?? 'var(--column-band-base)'
+        // custom phase colors get a stronger tint — at the default 5% a user-
+        // picked color was barely distinguishable from the neutral band
+        const base = col.color ? 12 : 5
         const hovered = hoverPhaseId !== undefined && hoverPhaseId === col.phaseId
         return (
           <div
@@ -30,8 +33,8 @@ export const ColumnBands = memo(function ColumnBands({ columns, bandY, hoverPhas
               width: col.width,
               height,
               background: hovered
-                ? `color-mix(in srgb, ${tint} 14%, transparent)`
-                : `color-mix(in srgb, ${tint} 5%, transparent)`,
+                ? `color-mix(in srgb, ${tint} ${base + 9}%, transparent)`
+                : `color-mix(in srgb, ${tint} ${base}%, transparent)`,
               borderLeft: '1px dashed var(--column-divider)',
               borderRight: '1px dashed var(--column-divider)',
               borderRadius: 12,

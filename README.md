@@ -13,7 +13,7 @@ An editable, game-style **tech tree for planning a lunar economy** — phases as
 - **Full editing UX** — drag between nodes to connect, drop a connection on empty canvas to create a prefilled node, click an edge label to change or delete it, drag edge endpoints to rewire, drag a node into another column to change its phase, right-click menus, undo/redo (`Ctrl+Z` / `Ctrl+Shift+Z`).
 - **Rich nodes** — TRL progress, costs, budgets, deadlines, tags, markdown bodies, and attachments (risks with a probability×impact matrix, experiments, evidence, people, orgs, funding, notes).
 - **Selection chain focus** — selecting a node highlights its full upstream + downstream dependency chain and fades the rest.
-- **Local file persistence** — open a `graph.json` via the File System Access API and edits autosave to it (Chromium-based browsers). Without a file, the demo data lives in-memory.
+- **Always saved** — every change is autosaved to the browser's localStorage, so closing the tab is always safe. Export/import the roadmap as JSON, reset to the demo, or start from a blank scaffold via the file menu (works in every browser).
 
 ## Quick start
 

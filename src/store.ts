@@ -3,16 +3,18 @@ import { subscribeWithSelector } from 'zustand/middleware'
 import { temporal } from 'zundo'
 import { shallow } from 'zustand/shallow'
 import type { VaultNodeData, EdgeData, Phase } from '@/types'
-import { migrateGraph } from '@/migrate'
+import { migrateGraph, type MigratedGraph } from '@/migrate'
 import rawGraph from '@/data/graph.json'
+
+// Persistence model: every change is autosaved to localStorage (works in any
+// browser, survives closing the tab immediately). Files exist only as
+// explicit export/import. Will be replaced by Yjs + IndexedDB later.
+const STORAGE_KEY = 'lunar-roadmap:graph:v1'
 
 interface GraphStore {
   vaultNodes: VaultNodeData[]
   vaultEdges: EdgeData[]
   phases: Phase[]
-
-  fileHandle: FileSystemFileHandle | null
-  isDirty: boolean
 
   // node/edge mutations
   updateNode: (id: string, patch: Partial<VaultNodeData>) => void
@@ -28,36 +30,70 @@ interface GraphStore {
   deletePhase: (id: string) => void
   movePhase:   (id: string, dir: -1 | 1) => void
 
-  // persistence
-  openFile: () => Promise<void>
-  saveFile: () => Promise<void>
-}
-
-function buildMeta(nodes: VaultNodeData[], edges: EdgeData[]) {
-  return {
-    generated: new Date().toISOString(),
-    nodeCount: nodes.length,
-    edgeCount: edges.length,
-  }
+  // file exchange + resets
+  exportJson:  () => void
+  importJson:  (file: File) => Promise<void>
+  resetToSeed: () => void
+  newBlank:    () => void
 }
 
 function newPhaseId(): string {
   return `p-${Math.random().toString(36).slice(2, 8)}`
 }
 
-const seed = migrateGraph(rawGraph)
+function loadInitial(): MigratedGraph {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY)
+    if (saved) return migrateGraph(JSON.parse(saved))
+  } catch (err) {
+    console.error('Could not load the saved roadmap — falling back to the demo seed', err)
+  }
+  return migrateGraph(rawGraph)
+}
 
-// temporal (zundo) provides undo/redo over the graph data only — fileHandle and
-// isDirty are excluded via partialize so undo can never clobber the file handle.
+// Minimal scaffold for "start blank": two phases, two connected nodes
+function blankGraph(): MigratedGraph {
+  const node = (partial: Partial<VaultNodeData> & Pick<VaultNodeData, 'id' | 'label' | 'type' | 'status' | 'phaseId' | 'body'>): VaultNodeData => ({
+    trl: null, tags: [], path: '', cost: null, budget: null,
+    duration: null, deadline: null, attachments: [],
+    ...partial,
+  })
+  return {
+    phases: [
+      { id: 'phase-1', name: 'Phase 1', order: 0, color: null, description: null },
+      { id: 'phase-2', name: 'Phase 2', order: 1, color: null, description: null },
+    ],
+    nodes: [
+      node({
+        id: 'first-step', label: 'First Step', type: 'tech', status: 'active', phaseId: 'phase-1',
+        body: 'Rename me — this is your first building block.',
+      }),
+      node({
+        id: 'the-goal', label: 'The Goal', type: 'goal', status: 'planned', phaseId: 'phase-2',
+        body: 'What are you building towards?',
+      }),
+    ],
+    edges: [{ id: 'e-first', source: 'first-step', target: 'the-goal', relation: 'flow' }],
+  }
+}
+
+const seed = loadInitial()
+
+// temporal (zundo) provides undo/redo over the graph data.
 // Will be replaced by Y.UndoManager when the store moves to Yjs.
 export const useStore = create<GraphStore>()(
   temporal(
-    subscribeWithSelector((set, get) => ({
+    subscribeWithSelector((set, get) => {
+      // replace the whole graph (import/reset/blank) — not an undoable edit
+      const loadGraph = (g: MigratedGraph) => {
+        set({ vaultNodes: g.nodes, vaultEdges: g.edges, phases: g.phases })
+        useStore.temporal.getState().clear()
+      }
+
+      return {
       vaultNodes: seed.nodes,
       vaultEdges: seed.edges,
       phases:     seed.phases,
-      fileHandle: null,
-      isDirty:    false,
 
       // ── node/edge mutations ───────────────────────────────────────────────
       updateNode: (id, patch) => {
@@ -123,42 +159,38 @@ export const useStore = create<GraphStore>()(
         })
       },
 
-      // ── persistence ───────────────────────────────────────────────────────
-      openFile: async () => {
-        const [handle] = await window.showOpenFilePicker({
-          types: [{ description: 'Graph JSON', accept: { 'application/json': ['.json'] } }],
-        })
-        const file = await handle.getFile()
-        const migrated = migrateGraph(JSON.parse(await file.text()))
-        set({
-          vaultNodes: migrated.nodes,
-          vaultEdges: migrated.edges,
-          phases:     migrated.phases,
-          fileHandle: handle,
-          isDirty:    false,
-        })
-        // a freshly opened file is not an undoable edit
-        useStore.temporal.getState().clear()
+      // ── file exchange + resets ────────────────────────────────────────────
+      exportJson: () => {
+        const { vaultNodes, vaultEdges, phases } = get()
+        const payload = JSON.stringify({
+          nodes: vaultNodes,
+          edges: vaultEdges,
+          phases,
+          meta: { generated: new Date().toISOString(), nodeCount: vaultNodes.length, edgeCount: vaultEdges.length },
+        }, null, 2)
+        const url = URL.createObjectURL(new Blob([payload], { type: 'application/json' }))
+        const a = document.createElement('a')
+        a.href = url
+        a.download = 'lunar-roadmap.json'
+        a.click()
+        URL.revokeObjectURL(url)
       },
 
-      saveFile: async () => {
-        const handle = get().fileHandle
-        if (!handle) return
-        const { vaultNodes, vaultEdges, phases } = get()
-        const payload = JSON.stringify(
-          { nodes: vaultNodes, edges: vaultEdges, phases, meta: buildMeta(vaultNodes, vaultEdges) },
-          null, 2
-        )
-        const writable = await handle.createWritable()
-        await writable.write(payload)
-        await writable.close()
-        set({ isDirty: false })
+      importJson: async (file) => {
+        loadGraph(migrateGraph(JSON.parse(await file.text())))
       },
-    })),
+
+      resetToSeed: () => {
+        loadGraph(migrateGraph(rawGraph))
+      },
+
+      newBlank: () => {
+        loadGraph(blankGraph())
+      },
+    }}),
     {
       partialize: s => ({ vaultNodes: s.vaultNodes, vaultEdges: s.vaultEdges, phases: s.phases }),
-      // without this, every setState (incl. isDirty bookkeeping) would push a
-      // duplicate history entry — only record when graph data actually changed
+      // only record history when graph data actually changed
       equality: (past, current) =>
         past.vaultNodes === current.vaultNodes &&
         past.vaultEdges === current.vaultEdges &&
@@ -168,17 +200,20 @@ export const useStore = create<GraphStore>()(
   )
 )
 
-// Debounced autosave: any graph change (mutations AND undo/redo) marks dirty
-// and schedules a save — mutations themselves stay persistence-free.
+// Debounced autosave to localStorage: every graph change (mutations, undo/redo,
+// imports, resets) is persisted — closing the tab immediately is always safe.
 let saveTimer: ReturnType<typeof setTimeout> | null = null
 useStore.subscribe(
   s => [s.vaultNodes, s.vaultEdges, s.phases] as const,
-  () => {
-    useStore.setState({ isDirty: true })
+  ([nodes, edges, phases]) => {
     if (saveTimer) clearTimeout(saveTimer)
     saveTimer = setTimeout(() => {
-      useStore.getState().saveFile().catch(console.error)
-    }, 500)
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ nodes, edges, phases }))
+      } catch (err) {
+        console.error('Autosave to localStorage failed', err)
+      }
+    }, 300)
   },
   { equalityFn: shallow }
 )

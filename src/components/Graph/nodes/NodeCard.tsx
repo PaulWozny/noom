@@ -24,14 +24,14 @@ function TrlMini({ trl, readiness }: { trl: number; readiness: ReadinessState | 
   const pct = ((trl - 1) / 8) * 100
   const accent = readiness === 'in-progress'
     ? READINESS_COLORS['in-progress']
-    : 'rgba(255,255,255,0.7)'
+    : 'var(--trl-fill)'
   return (
     <Tip label={`Technology Readiness Level ${trl} of 9`}>
       <div style={{ marginTop: 4 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 9, opacity: 0.7, marginBottom: 2 }}>
           <span>TRL</span><span>{trl}/9</span>
         </div>
-        <div style={{ height: 3, borderRadius: 2, background: 'rgba(255,255,255,0.15)', overflow: 'hidden' }}>
+        <div style={{ height: 3, borderRadius: 2, background: 'var(--trl-track)', overflow: 'hidden' }}>
           <div style={{ height: '100%', width: `${pct}%`, borderRadius: 2, background: accent }} />
         </div>
       </div>
@@ -50,7 +50,7 @@ function AttachmentBadges({ data }: { data: VaultNodeData }) {
         const labels = data.attachments.filter(a => a.kind === kind).map(a => a.label).join(', ')
         return (
           <Tip key={kind} label={`${count} ${kind}${count > 1 ? 's' : ''}: ${labels}`}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 2, fontSize: 9, color: '#aab' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 2, fontSize: 9, color: 'var(--node-text-subtle)' }}>
               <Icon style={{ width: 10, height: 10 }} /> {count}
             </span>
           </Tip>
@@ -76,7 +76,7 @@ export const NodeCard = memo(function NodeCard({ data, selected, id }: NodeProps
   const isPill = d.type === 'asset'
 
   const opacity = readiness === 'blocked' ? 0.45 : readiness === 'ready' ? 1 : 0.85
-  const borderColor = selected ? '#ffffff' : meta?.color ?? '#555'
+  const borderColor = selected ? 'var(--node-selected-border)' : meta?.color ?? '#555'
   const glow = !selected && readiness === 'ready'
     ? `0 0 10px ${READINESS_COLORS.ready}55, 0 0 0 1px ${READINESS_COLORS.ready}33`
     : selected ? `0 0 0 2px ${baseColor}44` : 'none'
@@ -181,14 +181,14 @@ export const NodeCard = memo(function NodeCard({ data, selected, id }: NodeProps
         >
           <TypeIcon style={{ width: 12, height: 12, color: baseColor, flexShrink: 0 }} />
           <span style={{
-            fontSize: 11, fontWeight: 600, color: '#fff', whiteSpace: 'nowrap',
+            fontSize: 11, fontWeight: 600, color: 'var(--node-text)', whiteSpace: 'nowrap',
             overflow: 'hidden', textOverflow: 'ellipsis',
           }}>
             {d.label}
           </span>
           {d.attachments.length > 0 && (
             <Tip label={`${d.attachments.length} attachment${d.attachments.length > 1 ? 's' : ''} — open the node for details`}>
-              <span style={{ fontSize: 9, color: '#aab', flexShrink: 0 }}>+{d.attachments.length}</span>
+              <span style={{ fontSize: 9, color: 'var(--node-text-subtle)', flexShrink: 0 }}>+{d.attachments.length}</span>
             </Tip>
           )}
           {StateIcon && meta && (
@@ -234,7 +234,7 @@ export const NodeCard = memo(function NodeCard({ data, selected, id }: NodeProps
 
           {/* label */}
           <div style={{
-            fontSize: 12, fontWeight: 600, color: '#fff', lineHeight: 1.3,
+            fontSize: 12, fontWeight: 600, color: 'var(--node-text)', lineHeight: 1.3,
             wordBreak: 'break-word',
           }}>
             {d.label}
@@ -256,7 +256,7 @@ export const NodeCard = memo(function NodeCard({ data, selected, id }: NodeProps
                 </Badge>
               ))}
               {d.tags.length > 2 && (
-                <span style={{ fontSize: 9, color: '#666' }}>+{d.tags.length - 2}</span>
+                <span style={{ fontSize: 9, color: 'var(--node-text-subtle)' }}>+{d.tags.length - 2}</span>
               )}
             </div>
           )}

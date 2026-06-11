@@ -22,6 +22,7 @@ import type { VaultNodeData, EdgeData, HandlePos, Phase, RelationType, Readiness
 import { NODE_COLORS, RELATION_COLORS } from '@/types'
 import { useStore } from '@/store'
 import { dependencyChain } from '@/derived'
+import { useThemeMode } from '@/theme-mode'
 
 const nodeTypes = { vaultNode: NodeCard }
 const edgeTypes = { labeled: LabeledEdge }
@@ -152,6 +153,7 @@ export function Graph({
     }
   }, [onNodesChange])
 
+  const themeMode = useThemeMode(s => s.mode)
   const deleteNode = useStore(s => s.deleteNode)
   const deleteEdge = useStore(s => s.deleteEdge)
   const addEdge    = useStore(s => s.addEdge)
@@ -182,6 +184,14 @@ export function Graph({
 
   // Full transitive dependency chain of the selection (upstream + downstream)
   const chainIds = selectedId ? dependencyChain(selectedId, allEdges) : null
+
+  // Column geometry comes from the layout pass, but name/color edits in the
+  // Phase Manager don't trigger a relayout — merge the live values at render
+  // time so recoloring/renaming a phase shows up immediately.
+  const liveColumns = columns.map(c => {
+    const phase = c.phaseId != null ? phases.find(p => p.id === c.phaseId) : undefined
+    return phase ? { ...c, name: phase.name, color: phase.color } : c
+  })
 
   useEffect(() => {
     const flowNodes = buildFlowNodes(allNodes, visibleNodeIds, readiness, selectedId, focusNeighborhood, chainIds, positionsRef.current, handlesRef.current)
@@ -365,7 +375,7 @@ export function Graph({
         <ContextMenuTrigger asChild>
           <div style={{ width: '100%', height: '100%' }}>
             <ReactFlow
-              colorMode="dark"
+              colorMode={themeMode}
               nodes={nodes}
               edges={edges}
               nodeTypes={nodeTypes}
@@ -409,20 +419,17 @@ export function Graph({
                   </Button>
                 </Tip>
               </Panel>
-              <ColumnBands columns={columns} bandY={bandY} hoverPhaseId={hoverPhaseId} />
-              <Background color="#ffffff08" gap={24} />
+              <ColumnBands columns={liveColumns} bandY={bandY} hoverPhaseId={hoverPhaseId} />
+              <Background color={themeMode === 'dark' ? '#ffffff08' : '#00000012'} gap={24} />
               <Controls style={{ background: 'var(--surface-card)', border: '1px solid var(--border-subtle)', borderRadius: 8 }} />
               <MiniMap
-                nodeColor={n => {
-                  const d = n.data as VaultNodeData
-                  return d.ghost ? '#333' : (NODE_COLORS[d.type] ?? '#555')
-                }}
-                maskColor="#0d0d1aaa"
+                nodeColor={n => NODE_COLORS[(n.data as VaultNodeData).type] ?? '#555'}
+                maskColor={themeMode === 'dark' ? '#0d0d1aaa' : '#c9cedeaa'}
                 style={{ background: 'var(--surface-deep)', border: '1px solid var(--border-subtle)', borderRadius: 8 }}
               />
             </ReactFlow>
             <ColumnHeaders
-              columns={columns}
+              columns={liveColumns}
               nodeCounts={visiblePhaseCounts}
               onOpenPhaseManager={onOpenPhaseManager}
             />

@@ -1,7 +1,7 @@
-import { useState, useMemo, useCallback, useEffect } from 'react'
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import { ReactFlowProvider } from '@xyflow/react'
 import { useStore as useZustandStore } from 'zustand'
-import { Undo2, Redo2, Columns3 } from 'lucide-react'
+import { Undo2, Redo2, Columns3, FolderDown, Sun, Moon } from 'lucide-react'
 
 import { Graph, type AddNodePrefill } from '@/components/Graph'
 import { DetailPanel } from '@/components/DetailPanel'
@@ -10,6 +10,13 @@ import { SearchBar } from '@/components/SearchBar'
 import { AddNodeModal } from '@/components/AddNodeModal'
 import { PhaseManagerDialog } from '@/components/PhaseManagerDialog'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
+import {
+  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu'
+import {
+  AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction,
+} from '@/components/ui/alert-dialog'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { Tip } from '@/components/Tip'
 import { Button } from '@/components/ui/button'
@@ -17,14 +24,16 @@ import type { StatusType, RelationType, VaultNodeData } from '@/types'
 import { trlColor } from '@/components/DetailPanel/TrlBar'
 import { computeReadiness } from '@/derived'
 import { useStore, undo, redo } from '@/store'
+import { useThemeMode } from '@/theme-mode'
 
 export default function App() {
   const vaultNodes  = useStore(s => s.vaultNodes)
   const vaultEdges  = useStore(s => s.vaultEdges)
   const phases      = useStore(s => s.phases)
-  const fileHandle  = useStore(s => s.fileHandle)
-  const isDirty     = useStore(s => s.isDirty)
-  const openFile    = useStore(s => s.openFile)
+  const exportJson  = useStore(s => s.exportJson)
+  const importJson  = useStore(s => s.importJson)
+  const resetToSeed = useStore(s => s.resetToSeed)
+  const newBlank    = useStore(s => s.newBlank)
   const addNode     = useStore(s => s.addNode)
   const addEdge     = useStore(s => s.addEdge)
   const updateNode  = useStore(s => s.updateNode)
@@ -35,11 +44,29 @@ export default function App() {
   const [addNodePrefill, setAddNodePrefill] = useState<AddNodePrefill | null>(null)
   const [showAddNode, setShowAddNode] = useState(false)
   const [showPhaseManager, setShowPhaseManager] = useState(false)
+  const [confirmAction, setConfirmAction] = useState<'reset' | 'blank' | null>(null)
+  const importInputRef = useRef<HTMLInputElement>(null)
+  const themeMode = useThemeMode(s => s.mode)
+  const toggleTheme = useThemeMode(s => s.toggle)
 
-  // global undo/redo shortcuts — skipped while typing
+  // keep the <html> class in sync with the theme store (initial class is set
+  // pre-paint by the inline script in index.html)
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', themeMode === 'dark')
+  }, [themeMode])
+
+  // global shortcuts: Ctrl+Z/Ctrl+Shift+Z undo/redo (skipped while typing),
+  // Ctrl+S exports the roadmap as JSON
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
-      if (!(e.ctrlKey || e.metaKey) || e.key.toLowerCase() !== 'z') return
+      if (!(e.ctrlKey || e.metaKey)) return
+      const key = e.key.toLowerCase()
+      if (key === 's') {
+        e.preventDefault()
+        useStore.getState().exportJson()
+        return
+      }
+      if (key !== 'z') return
       const t = e.target as HTMLElement
       if (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable) return
       e.preventDefault()
@@ -125,6 +152,12 @@ export default function App() {
         </div>
         <SearchBar nodes={vaultNodes} onSelect={handleJumpTo} />
         <div className="flex items-center gap-2 ml-auto mr-2">
+          <Tip label={themeMode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'} side="bottom">
+            <Button variant="ghost" size="sm" className="h-6 w-6 p-0" onClick={toggleTheme}
+              aria-label={themeMode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>
+              {themeMode === 'dark' ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
+            </Button>
+          </Tip>
           <Tip label="Undo (Ctrl+Z)" side="bottom">
             <Button variant="ghost" size="sm" className="h-6 w-6 p-0"
               disabled={!canUndo} onClick={() => undo()}>
@@ -137,26 +170,45 @@ export default function App() {
               <Redo2 className="w-3.5 h-3.5" />
             </Button>
           </Tip>
-          {/* File status */}
-          <Tip side="bottom" label={fileHandle
-            ? (isDirty ? 'Changes not yet written to the opened file' : 'All changes saved to the opened file')
-            : 'No file opened — changes live only in this tab. Use "open" to enable autosave.'}>
-            <span className="text-[11px] cursor-default" style={{ color: isDirty ? '#e0913f' : '#48b27a' }}>
-              {fileHandle
-                ? (isDirty ? '● unsaved' : '✓ saved')
-                : '○ no file'
-              }
-            </span>
-          </Tip>
-          <Tip label="Open a graph.json file — edits then autosave to it" side="bottom">
-            <Button
-              variant="outline" size="sm"
-              className="h-6 text-[11px] px-2"
-              onClick={() => openFile().catch(console.error)}
-            >
-              open
-            </Button>
-          </Tip>
+          {/* File menu — the roadmap itself autosaves to the browser */}
+          <DropdownMenu>
+            <Tip label="Every change is saved in this browser automatically — use this menu to export/import JSON or start over" side="bottom">
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="h-6 text-[11px] px-2 gap-1">
+                  <FolderDown className="w-3 h-3" /> file
+                </Button>
+              </DropdownMenuTrigger>
+            </Tip>
+            <DropdownMenuContent className="bg-card border-border" align="end">
+              <DropdownMenuItem className="text-xs" onClick={() => exportJson()}>
+                Export JSON (Ctrl+S)
+              </DropdownMenuItem>
+              <DropdownMenuItem className="text-xs" onClick={() => importInputRef.current?.click()}>
+                Import JSON…
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="text-xs" onClick={() => setConfirmAction('reset')}>
+                Reset to demo roadmap
+              </DropdownMenuItem>
+              <DropdownMenuItem className="text-xs" onClick={() => setConfirmAction('blank')}>
+                Start a blank roadmap
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <input
+            ref={importInputRef}
+            type="file"
+            accept="application/json,.json"
+            className="hidden"
+            onChange={e => {
+              const file = e.target.files?.[0]
+              if (file) importJson(file).catch(err => {
+                console.error(err)
+                window.alert('Could not import that file — is it a roadmap JSON export?')
+              })
+              e.target.value = ''
+            }}
+          />
           <Tip label="Manage phases: rename, reorder, recolor, add, delete" side="bottom">
             <Button
               variant="outline" size="sm"
@@ -238,6 +290,28 @@ export default function App() {
 
       {/* Phase manager */}
       <PhaseManagerDialog open={showPhaseManager} onOpenChange={setShowPhaseManager} />
+
+      {/* Replace-roadmap confirmation */}
+      <AlertDialog open={confirmAction != null} onOpenChange={open => { if (!open) setConfirmAction(null) }}>
+        <AlertDialogContent className="bg-card border-border">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-sm">
+              {confirmAction === 'reset' ? 'Reset to the demo roadmap?' : 'Start a blank roadmap?'}
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-xs">
+              This replaces your current roadmap and clears the undo history.
+              Export it first if you want to keep a copy.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="h-7 text-xs">Cancel</AlertDialogCancel>
+            <AlertDialogAction className="h-7 text-xs"
+              onClick={() => { (confirmAction === 'reset' ? resetToSeed : newBlank)(); setConfirmAction(null) }}>
+              {confirmAction === 'reset' ? 'Reset' : 'Start blank'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* Status bar */}
       <footer className="statusbar">
